@@ -18,7 +18,7 @@ group by  extract(month from hire_date) order by hire_month;
 order by total_salary desc fetch first 1 row only
 select * from sh.SALES
 
-##1. count the nr of sales transactions for each product;
+## 1. count the nr of sales transactions for each product;
 --select prod_id, count(*) from sh.sales group by prod_id
 
 ## 2. find the avg sale amount for each product;
@@ -41,6 +41,25 @@ select * from sh.SALES
 
 ## 8.  find the lowest purchase amount for each customer;
 select cust_id,min(amount_sold) from sh.sales group by cust_id
+
+## 9.  find the product that generated the higest income;
+-- select prod_id,sum(amount_sold) as total_revenue from sh.sales group by prod_id  order by 
+-- total_revenue desc fetch first 1 row only  
+
+ ## 10. find the most frequently purchased product;
+--  --select prod_id, count(*) as purchase_count from sh.sales group by prod_id order by purchase_count
+-- desc fetch first 1 row only
+
+ ## 11.find the total revenue per month;
+-- --select extract(month from time_id) as month,sum(amount_sold)as total_revenue
+--  from sh.sales  group by extract(month from time_id)  order by month;
+
+ ## 12. find the most valuable customer based on total spending;
+ --select  cust_id,max(amount_sold),sum(QUANTITY_SOLD),sum(AMOUNT_SOLD) as total_spent 
+ from sh.sales group by cust_id order by total_spent desc fetch first 1 row only  ;
+
+ ## 13. find the total revenue for sales channel;
+ select channel_id,sum(AMOUNT_SOLD) from sh.sales group by channel_id;
 
 
 
