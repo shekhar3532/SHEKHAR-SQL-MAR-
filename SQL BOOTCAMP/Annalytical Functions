@@ -1,1 +1,47 @@
+ ## 1. Assign a rank to employees based on their salary within each department.
+ ##Uses RANK() to assign ranks based on salary in each department.
+--select employee_id,salary,department_id, rank() over 
+(partition by department_id order by salary desc)
+as salary_rank from hr.employees
 
+
+## 2. Find the top 3 highest-paid employees in each department.
+## Uses RANK() to rank employees based on salary and filters top 3.
+--select employee_id,salary,department_id
+from (
+select employee_id,salary,department_id, rank() over 
+(partition by department_id order by salary desc)
+as salary_rank from hr.employees
+) where salary_rank<=3;
+
+## 3. Identify the second highest salary in each department using DENSE_RANK().
+## Uses DENSE_RANK() to identify employees with the second-highest salary per department.
+select employee_id,salary,department_id,salary_rank
+from (
+select employee_id,salary,department_id, dense_rank() over 
+(partition by department_id order by salary desc)
+as salary_rank from hr.employees
+) where salary_rank=4;
+------------------------------------------------------------------------------------------
+ ## 4. Identify the fourth highest salary in department 60.
+--select employee_id,salary,department_id,salary_rank
+from (
+select employee_id,salary, department_id, dense_rank() over 
+(partition by department_id  order by salary desc)
+as salary_rank from hr.employees
+) where salary_rank=4 and department_id=60;
+
+
+## 5. Compute the cumulative total salary of employees ordered by hire date.
+## Uses SUM() OVER() to create a running total of salaries
+--select employee_id,salary,hire_date, SUM(salary) over (order by hire_date)as cumulative_salary 
+from hr.employees;
+
+--select employee_id,salary,hire_date, SUM(salary) over (order by HIRE_DATE )as cumulative_salary 
+from hr.employees
+
+## 6. Find the salary difference between each employee and the next highest-paid employee.
+##Uses LEAD() to compare an employee's salary with the next highest.
+select employee_id,salary,
+ LEAD(salary) OVER (ORDER BY salary DESC) - salary AS salary_diff
+FROM hr.employees;
